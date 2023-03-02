@@ -3,11 +3,39 @@
 from pesummary.core.file.formats.base_read import Read
 from pesummary.core.file.formats.bilby import Bilby
 from pesummary.core.file.formats.default import Default
+from pesummary.core.file.formats.dingo import Dingo
 from pesummary.core.file.formats.pesummary import PESummary, PESummaryDeprecated
 from pesummary.utils.utils import logger
 import os
 
 __author__ = ["Charlie Hoy <charlie.hoy@ligo.org>"]
+
+
+def is_dingo_hdf5_file(path):
+    """Determine if the results file is a dingo hdf5 results file
+
+    Parameters
+    ----------
+    path: str
+        path to the results file
+    """
+    import h5py
+    try:
+        f = h5py.File(path, "r")
+        if "dingo" in f["version"]:
+            return True
+        elif "dingo" in str(f["version"][0]):
+            return True
+        return False
+    except (KeyError, TypeError):
+        try:
+            if "nsf+embedding" in f.attrs["settings"]:  # Compatibility with pre-version.
+                return True
+            return False
+        except Exception:
+            return False
+    except Exception:
+        return False
 
 
 def is_bilby_hdf5_file(path):
@@ -196,6 +224,7 @@ def _check_pesummary_file(f):
 
 
 CORE_HDF5_LOAD = {
+    is_dingo_hdf5_file: Dingo.load_file,
     is_bilby_hdf5_file: Bilby.load_file,
     is_pesummary_hdf5_file: PESummary.load_file,
     is_pesummary_hdf5_file_deprecated: PESummaryDeprecated.load_file
