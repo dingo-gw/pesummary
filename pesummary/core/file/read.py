@@ -21,20 +21,12 @@ def is_dingo_hdf5_file(path):
     """
     import h5py
     try:
-        f = h5py.File(path, "r")
-        if "dingo" in f["version"]:
-            return True
-        elif "dingo" in str(f["version"][0]):
-            return True
-        return False
-    except (KeyError, TypeError):
-        try:
-            if "nsf+embedding" in f.attrs["settings"]:  # Compatibility with pre-version.
+        with h5py.File(path, "r") as f:
+            if "version" in f and "dingo" in str(f["version"][()]):
                 return True
-            return False
-        except Exception:
-            return False
-    except Exception:
+            else:
+                return False
+    except:
         return False
 
 
