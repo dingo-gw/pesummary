@@ -80,6 +80,7 @@ test = [
 extras = [
 	"bilby>=1.1.1",
 	"coloredlogs",
+	"dingo-gw",
 	"GitPython",
 	"gwosc",
 	"jupyter_client",
