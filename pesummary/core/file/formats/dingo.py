@@ -26,11 +26,7 @@ def _load_dingo(path):
 
 
 def read_dingo(
-    path,
-    disable_prior=False,
-    nsamples_for_prior=None,
-    _dingo_class=None,
-    **kwargs
+    path, disable_prior=False, nsamples_for_prior=None, _dingo_class=None, **kwargs
 ):
     """Grab the parameters and samples in a dingo file
 
